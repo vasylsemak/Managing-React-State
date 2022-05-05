@@ -3,23 +3,12 @@ import './App.css'
 import Header from './Header'
 import Footer from './Footer'
 import Spinner from './Spinner'
+import Product from './Product'
 import UseFetch from './services/UseFetch'
 
 export default function App() {
   const { data, error, loading } = UseFetch('shoes')
   const [size, setSize] = useState('')
-
-  function renderProduct(p) {
-    return (
-      <div key={p.id} className='product'>
-        <a href='/'>
-          <img src={`/images/${p.image}`} alt={p.name} />
-          <h3>{p.name}</h3>
-          <p>${p.price}</p>
-        </a>
-      </div>
-    )
-  }
 
   const filteredProducts = size
     ? data.filter((p) => p.skus.find((sku) => sku.size === parseInt(size)))
@@ -47,7 +36,11 @@ export default function App() {
             </select>
             {size && <h2>Found {filteredProducts.length} items</h2>}
           </section>
-          <section id='products'>{filteredProducts.map(renderProduct)}</section>
+          <section id='products'>
+            {filteredProducts.map((p) => (
+              <Product key={p.id} {...p} />
+            ))}
+          </section>
         </main>
       </div>
       <Footer />
