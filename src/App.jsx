@@ -1,36 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import Header from './Header'
 import Footer from './Footer'
 import Spinner from './Spinner'
-import { getProducts } from './services/productService'
+import UseFetch from './services/UseFetch'
 
 export default function App() {
+  const { data, error, loading } = UseFetch('shoes')
   const [size, setSize] = useState('')
-  const [products, setProducts] = useState([])
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  // useEffect(() => {
-  //   getProducts('shoes')
-  //     .then((products) => setProducts(products))
-  //     .catch((e) => setError(e))
-  //     .finally(() => setLoading(false))
-  // }, [])
-
-  useEffect(() => {
-    async function init() {
-      try {
-        const responce = await getProducts('shoes')
-        setProducts(responce)
-      } catch (err) {
-        setError(err)
-      } finally {
-        setLoading(false)
-      }
-    }
-    init()
-  }, [])
 
   function renderProduct(p) {
     return (
@@ -45,8 +22,8 @@ export default function App() {
   }
 
   const filteredProducts = size
-    ? products.filter((p) => p.skus.find((sku) => sku.size === parseInt(size)))
-    : products
+    ? data.filter((p) => p.skus.find((sku) => sku.size === parseInt(size)))
+    : data
 
   if (error) throw error
   if (loading) return <Spinner />
