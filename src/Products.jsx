@@ -7,8 +7,8 @@ import { useParams } from 'react-router-dom'
 
 export default function Products() {
   const { category } = useParams()
-
   const [size, setSize] = useState('')
+
   const {
     data: products,
     error,
@@ -19,9 +19,9 @@ export default function Products() {
     ? products.filter((p) => p.skus.find((sku) => sku.size === parseInt(size)))
     : products
 
-  if (error) throw error
   if (loading) return <Spinner />
   if (products.length === 0) return <PageNotFound />
+  if (error) throw error
 
   return (
     <>
