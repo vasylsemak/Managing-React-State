@@ -9,7 +9,11 @@ export default function Products() {
   const { category } = useParams()
 
   const [size, setSize] = useState('')
-  const { data: products, error, loading } = UseFetch(category)
+  const {
+    data: products,
+    error,
+    loading,
+  } = UseFetch('products?category=' + category)
 
   const filteredProducts = size
     ? products.filter((p) => p.skus.find((sku) => sku.size === parseInt(size)))

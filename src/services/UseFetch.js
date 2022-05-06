@@ -8,7 +8,7 @@ export default function UseFetch(url) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(baseUrl + 'products?category=' + url)
+    fetch(baseUrl + url)
       .then((response) => {
         if (response.ok) return response.json()
         else throw response

@@ -1,9 +1,5 @@
 import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
-
-const activeStyle = {
-  color: 'red',
-}
+import { Link } from 'react-router-dom'
 
 export default function Header() {
   return (
@@ -16,14 +12,10 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <NavLink to='/shoes' activeStyle={activeStyle}>
-              Shoes
-            </NavLink>
+            <Link to='/shoes'>Shoes</Link>
           </li>
           <li>
-            <NavLink to='/cart' activeStyle={activeStyle}>
-              Cart
-            </NavLink>
+            <Link to='/cart'>Cart</Link>
           </li>
         </ul>
       </nav>
