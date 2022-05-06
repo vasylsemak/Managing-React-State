@@ -1,18 +1,23 @@
 import React, { useState } from 'react'
 import Spinner from './Spinner'
 import Product from './Product'
+import PageNotFound from './PageNotFound'
 import UseFetch from './services/UseFetch'
+import { useParams } from 'react-router-dom'
 
 export default function Products() {
-  const { data: products, error, loading } = UseFetch('shoes')
+  const { category } = useParams()
+
   const [size, setSize] = useState('')
+  const { data: products, error, loading } = UseFetch(category)
 
   const filteredProducts = size
     ? products.filter((p) => p.skus.find((sku) => sku.size === parseInt(size)))
     : products
 
-  if (loading) return <Spinner />
   if (error) throw error
+  if (loading) return <Spinner />
+  if (products.length === 0) return <PageNotFound />
 
   return (
     <>

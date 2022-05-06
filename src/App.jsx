@@ -3,6 +3,9 @@ import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import Products from './Products'
+import Detail from './Detail'
+import Cart from './Cart'
+import { Routes, Route } from 'react-router-dom'
 
 export default function App() {
   return (
@@ -10,7 +13,12 @@ export default function App() {
       <div className='content'>
         <Header />
         <main>
-          <Products />
+          <Routes>
+            <Route path='/:category' element={<Products />} />
+            <Route path='/:category/:id' element={<Detail />} />
+            <Route path='/cart' element={<Cart />} />
+            <Route path='/' element={<h1>Welcome to Curved Rock Fitness</h1>} />
+          </Routes>
         </main>
       </div>
       <Footer />
