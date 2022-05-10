@@ -4,10 +4,10 @@ import PageNotFound from './PageNotFound'
 import UseFetch from './services/UseFetch'
 import { useParams, useNavigate } from 'react-router-dom'
 
-export default function Detail() {
-  const navigate = useNavigate()
+export default function Detail({ addToCart }) {
   const { id } = useParams()
   const [sku, setSku] = useState('')
+  const navigate = useNavigate()
   const { data: product, loading, error } = UseFetch(`products/${id}`)
 
   if (loading) return <Spinner />
@@ -33,9 +33,12 @@ export default function Detail() {
 
       <p>
         <button
-          className='btn btn-primary'
-          onClick={() => navigate('/cart')}
           disabled={!sku}
+          onClick={() => {
+            addToCart(id, sku)
+            navigate('/cart')
+          }}
+          className='btn btn-primary'
         >
           Add to cart
         </button>
