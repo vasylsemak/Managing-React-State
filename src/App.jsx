@@ -1,41 +1,17 @@
 import './App.css'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import Products from './Products'
 import Detail from './Detail'
 import Cart from './Cart'
-import { Routes, Route } from 'react-router-dom'
+import useCart from './services/useCart'
 
 export default function App() {
-  const [cart, setCart] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('cart')) ?? []
-    } catch (error) {
-      console.error('The cart could not be parsed in JSON')
-      return []
-    }
-  })
-  useEffect(() => localStorage.setItem('cart', JSON.stringify(cart)), [cart])
+  const { cart, addToCart, updateQuantity } = useCart()
 
-  function addToCart(id, sku) {
-    setCart((items) => {
-      const isInCart = items.find((i) => i.sku === sku)
-
-      if (isInCart)
-        return items.map((i) =>
-          i.sku === sku ? { ...i, quantity: i.quantity + 1 } : i
-        )
-      else return [...items, { id, sku, quantity: 1 }]
-    })
-  }
-
-  const updateQuantity = (sku, quantity) =>
-    quantity === 0
-      ? setCart((items) => items.filter((i) => i.sku !== sku))
-      : setCart((items) =>
-          items.map((i) => (i.sku === sku ? { ...i, quantity } : i))
-        )
+  console.log('cart: ', cart)
 
   return (
     <>
