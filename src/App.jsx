@@ -1,5 +1,5 @@
 import './App.css'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import Products from './Products'
@@ -8,7 +8,15 @@ import Cart from './Cart'
 import { Routes, Route } from 'react-router-dom'
 
 export default function App() {
-  const [cart, setCart] = useState([])
+  const [cart, setCart] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('cart')) ?? []
+    } catch (error) {
+      console.error('The cart could not be parsed in JSON')
+      return []
+    }
+  })
+  useEffect(() => localStorage.setItem('cart', JSON.stringify(cart)), [cart])
 
   function addToCart(id, sku) {
     setCart((items) => {
