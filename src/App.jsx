@@ -22,9 +22,12 @@ export default function App() {
     })
   }
 
-  function updateQuantity(sku, quant) {
-    return {}
-  }
+  const updateQuantity = (sku, quantity) =>
+    quantity === 0
+      ? setCart((items) => items.filter((i) => i.sku !== sku))
+      : setCart((items) =>
+          items.map((i) => (i.sku === sku ? { ...i, quantity } : i))
+        )
 
   return (
     <>
@@ -39,8 +42,7 @@ export default function App() {
             />
             <Route
               path='/cart'
-              element={<Cart cart={cart} />}
-              updateQuantity={updateQuantity}
+              element={<Cart cart={cart} updateQuantity={updateQuantity} />}
             />
             <Route path='/' element={<h1>Welcome to Curved Rock Fitness</h1>} />
           </Routes>
