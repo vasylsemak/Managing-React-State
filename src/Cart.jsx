@@ -42,9 +42,13 @@ export default function Cart({ cart, updateQuantity }) {
   if (loading) return <Spinner />
   if (error) throw error
 
+  const totalItems = cart.reduce((accum, item) => accum + item.quantity, 0)
+
   return (
     <section id='cart'>
-      <h1>Cart</h1>
+      <h1>
+        {!totalItems ? 'Your cart is empty' : `${totalItems} in your cart`}
+      </h1>
       <ul>{cart.map(renderItem)}</ul>
     </section>
   )
