@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { saveShippingAddress } from './services/shippingService'
+import formErrors from './services/formErrors'
 
 // Form status state using enumaration pattern
 const STATUS = {
   IDLE: 'IDLE',
   SUBMITTING: 'SUBMITTING',
-  SUBMITED: 'SUBMITED',
+  SUBMITTED: 'SUBMITTED',
   COMPLETED: 'COMPLETED',
 }
 
@@ -16,6 +17,11 @@ export default function Checkout({ cart, clearCart }) {
   const [address, setAddress] = useState(emptyAddress)
   const [status, setStatus] = useState(STATUS.IDLE)
   const [saveError, setSaveError] = useState(null)
+
+  // Derived state
+  const errorsObj = formErrors(address)
+  const errorsKeys = Object.keys(errorsObj)
+  const isValid = errorsKeys.length === 0
 
   function handleChange(e) {
     e.persist() // presist event - do not garbage collect it
@@ -32,17 +38,19 @@ export default function Checkout({ cart, clearCart }) {
   async function handleSubmit(event) {
     event.preventDefault()
     setStatus(STATUS.SUBMITTING)
-
-    /*  1. async call to API
-        2. clear cart
-        3. update status to completed
-    */
-    try {
-      await saveShippingAddress(address)
-      clearCart()
-      setStatus(STATUS.COMPLETED)
-    } catch (error) {
-      setSaveError(error)
+    // if form filled - submit and set status to COMPLETED
+    if (isValid) {
+      try {
+        await saveShippingAddress(address)
+        clearCart()
+        setStatus(STATUS.COMPLETED)
+      } catch (error) {
+        setSaveError(error)
+      }
+    } else {
+      /* if form NOT filled properly - set status SUBMITED
+        and render errors on screen */
+      setStatus(STATUS.SUBMITTED)
     }
   }
 
@@ -53,6 +61,18 @@ export default function Checkout({ cart, clearCart }) {
   return (
     <>
       <h1>Shipping Info</h1>
+
+      {!isValid && status === STATUS.SUBMITTED && (
+        <div role='alert'>
+          <p>Please fix following errors:</p>
+          <ul>
+            {errorsKeys.map((errorKey) => (
+              <li key={errorKey}>{errorsObj[errorKey]}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor='city'>City</label>
