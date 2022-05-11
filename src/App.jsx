@@ -6,6 +6,7 @@ import Footer from './Footer'
 import Products from './Products'
 import Detail from './Detail'
 import Cart from './Cart'
+import Checkout from './Checkout'
 import useCart from './services/useCart'
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
               path='/cart'
               element={<Cart cart={cart} updateQuantity={updateQuantity} />}
             />
+            <Route path='/checkout' element={<Checkout cart={cart} />} />
             <Route path='/' element={<h1>Welcome to Curved Rock Fitness</h1>} />
           </Routes>
         </main>
