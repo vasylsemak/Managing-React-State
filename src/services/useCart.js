@@ -37,5 +37,7 @@ export default function useCart() {
           items.map((i) => (i.sku === sku ? { ...i, quantity } : i))
         )
 
-  return { cart, addToCart, updateQuantity }
+  const clearCart = () => setCart([])
+
+  return { cart, addToCart, updateQuantity, clearCart }
 }

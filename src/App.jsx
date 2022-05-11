@@ -10,7 +10,7 @@ import Checkout from './Checkout'
 import useCart from './services/useCart'
 
 export default function App() {
-  const { cart, addToCart, updateQuantity } = useCart()
+  const { cart, addToCart, updateQuantity, clearCart } = useCart()
 
   return (
     <>
@@ -27,7 +27,10 @@ export default function App() {
               path='/cart'
               element={<Cart cart={cart} updateQuantity={updateQuantity} />}
             />
-            <Route path='/checkout' element={<Checkout cart={cart} />} />
+            <Route
+              path='/checkout'
+              element={<Checkout cart={cart} clearCart={clearCart} />}
+            />
             <Route path='/' element={<h1>Welcome to Curved Rock Fitness</h1>} />
           </Routes>
         </main>
