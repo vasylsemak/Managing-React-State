@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 
 // !!!! Declaring outside component to avoid recreation on each render
-const emptyAddress = {
-  city: '',
-  country: '',
-}
+const emptyAddress = { city: '', country: '' }
 
 export default function Checkout({ cart }) {
   const [address, setAddress] = useState(emptyAddress)
 
   function handleChange(e) {
-    // TODO
+    e.persist() // presist event - do not garbage collect it
+    setAddress((address) => ({
+      ...address,
+      [e.target.id]: e.target.value,
+    }))
   }
 
   function handleBlur(event) {

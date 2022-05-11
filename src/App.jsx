@@ -12,8 +12,6 @@ import useCart from './services/useCart'
 export default function App() {
   const { cart, addToCart, updateQuantity } = useCart()
 
-  console.log('cart: ', cart)
-
   return (
     <>
       <div className='content'>
