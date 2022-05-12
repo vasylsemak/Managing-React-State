@@ -12,13 +12,16 @@ const STATUS = {
 
 // !!!! Declaring outside component to avoid recreation on each render
 const emptyAddress = { city: '', country: '' }
+const touchedObj = {}
 
 export default function Checkout({ cart, clearCart }) {
   const [address, setAddress] = useState(emptyAddress)
   const [status, setStatus] = useState(STATUS.IDLE)
   const [saveError, setSaveError] = useState(null)
+  const [touched, setTouched] = useState(touchedObj)
 
   // Derived state
+  // Form validation using formErrors f-n
   const errorsObj = formErrors(address)
   const errorsKeys = Object.keys(errorsObj)
   const isValid = errorsKeys.length === 0
@@ -31,12 +34,16 @@ export default function Checkout({ cart, clearCart }) {
     }))
   }
 
-  function handleBlur(event) {
-    // TODO
+  function handleBlur(e) {
+    let touchedInput = e.target.id
+    setTouched((cur) => ({
+      ...cur,
+      [touchedInput]: true,
+    }))
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault()
+  async function handleSubmit(e) {
+    e.preventDefault()
     setStatus(STATUS.SUBMITTING)
     // if form filled - submit and set status to COMPLETED
     if (isValid) {
@@ -84,6 +91,10 @@ export default function Checkout({ cart, clearCart }) {
             onBlur={handleBlur}
             onChange={handleChange}
           />
+          {/* inline form input evaluation */}
+          <p role='alert'>
+            {(touched.city || status === STATUS.SUBMITTED) && errorsObj.city}
+          </p>
         </div>
 
         <div>
@@ -101,6 +112,11 @@ export default function Checkout({ cart, clearCart }) {
             <option value='United Kingdom'>United Kingdom</option>
             <option value='USA'>USA</option>
           </select>
+          {/* inline form input evaluation */}
+          <p role='alert'>
+            {(touched.country || status === STATUS.SUBMITTED) &&
+              errorsObj.country}
+          </p>
         </div>
 
         <div>

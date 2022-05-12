@@ -139,6 +139,16 @@
       "city": "S",
       "country": "China",
       "id": 16
+    },
+    {
+      "city": "Staten Island          ",
+      "country": "India",
+      "id": 17
+    },
+    {
+      "city": "s",
+      "country": "China",
+      "id": 18
     }
   ]
 }
