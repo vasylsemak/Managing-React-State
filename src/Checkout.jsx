@@ -14,7 +14,7 @@ const STATUS = {
 const emptyAddress = { city: '', country: '' }
 const touchedObj = {}
 
-export default function Checkout({ cart, clearCart }) {
+export default function Checkout({ cart, dispatch }) {
   const [address, setAddress] = useState(emptyAddress)
   const [status, setStatus] = useState(STATUS.IDLE)
   const [saveError, setSaveError] = useState(null)
@@ -49,7 +49,7 @@ export default function Checkout({ cart, clearCart }) {
     if (isValid) {
       try {
         await saveShippingAddress(address)
-        clearCart()
+        dispatch({ type: 'empty' })
         setStatus(STATUS.COMPLETED)
       } catch (error) {
         setSaveError(error)

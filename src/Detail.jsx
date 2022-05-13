@@ -4,7 +4,7 @@ import PageNotFound from './PageNotFound'
 import useFetch from './services/useFetch'
 import { useParams, useNavigate } from 'react-router-dom'
 
-export default function Detail({ addToCart }) {
+export default function Detail({ dispatch }) {
   const { id } = useParams()
   const [sku, setSku] = useState('')
   const navigate = useNavigate()
@@ -35,7 +35,7 @@ export default function Detail({ addToCart }) {
         <button
           disabled={!sku}
           onClick={() => {
-            addToCart(id, sku)
+            dispatch({ type: 'add', id, sku })
             navigate('/cart')
           }}
           className='btn btn-primary'

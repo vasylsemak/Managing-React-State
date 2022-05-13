@@ -1,43 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useReducer } from 'react'
+import cartReducer from '../cartReducer'
+
+// fetch cart from localStorage
+let cartFetched
+try {
+  cartFetched = JSON.parse(localStorage.getItem('cart')) ?? []
+} catch (error) {
+  console.error('The cart could not be parsed in JSON')
+  cartFetched = []
+}
 
 export default function useCart() {
-  const [cart, setCart] = useState(() => {
-    /* use f-n in useState for:
-    1. prevent fetching from localStorage if cart does not change - 
-      f-n in useState does expensive loading
-    2. catch possible errors while parsing cart
-  */
-    try {
-      return JSON.parse(localStorage.getItem('cart')) ?? []
-    } catch (error) {
-      console.error('The cart could not be parsed in JSON')
-      return []
-    }
-  })
+  const [cart, dispatch] = useReducer(cartReducer, cartFetched)
 
   // set localStorage every time cart updates
   useEffect(() => localStorage.setItem('cart', JSON.stringify(cart)), [cart])
 
-  const addToCart = (id, sku) => {
-    setCart((items) => {
-      const isInCart = items.find((i) => i.sku === sku)
-
-      if (isInCart)
-        return items.map((i) =>
-          i.sku === sku ? { ...i, quantity: i.quantity + 1 } : i
-        )
-      else return [...items, { id, sku, quantity: 1 }]
-    })
-  }
-
-  const updateQuantity = (sku, quantity) =>
-    quantity === 0
-      ? setCart((items) => items.filter((i) => i.sku !== sku))
-      : setCart((items) =>
-          items.map((i) => (i.sku === sku ? { ...i, quantity } : i))
-        )
-
-  const clearCart = () => setCart([])
-
-  return { cart, addToCart, updateQuantity, clearCart }
+  return { cart, dispatch }
 }
