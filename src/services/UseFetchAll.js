@@ -7,14 +7,16 @@ export default function useFetchAll(urls) {
   // compare urls on inital render and rerender to prevent infinite fetch request
   // cart is empty when it mounts first time
   const prevUrls = useRef([])
+  const isMountedRef = useRef(false)
 
   useEffect(() => {
+    isMountedRef.current = true
     // areEqual - f-n to compare urls arrays
-    if (areEqual(prevUrls.current, urls)) {
+    if (isMountedRef.current && areEqual(prevUrls.current, urls)) {
       setLoading(false)
       return
     }
-    // if mot equal - cart arr has chenged -> new fetch request
+    // if mot equal - cart arr has chenged -> add new urls arr to urls Ref
     prevUrls.current = urls
 
     const promises = urls.map((url) =>
@@ -25,12 +27,18 @@ export default function useFetchAll(urls) {
     )
 
     Promise.all(promises)
-      .then((json) => setData(json))
+      .then((json) => {
+        if (isMountedRef.current) setData(json)
+      })
       .catch((e) => {
         console.error(e)
-        setError(e)
+        if (isMountedRef.current) setError(e)
       })
-      .finally(() => setLoading(false))
+      .finally(() => {
+        if (isMountedRef.current) setLoading(false)
+      })
+    // set isMountedRef to true when component unmounts
+    return () => (isMountedRef.current = false)
   }, [urls])
 
   return { data, loading, error }
