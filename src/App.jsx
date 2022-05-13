@@ -1,6 +1,7 @@
 import './App.css'
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { CartContext } from './cartContext'
 import Header from './Header'
 import Footer from './Footer'
 import Products from './Products'
@@ -13,7 +14,7 @@ export default function App() {
   const { cart, dispatch } = useCart()
 
   return (
-    <>
+    <CartContext.Provider value={{ cart, dispatch }}>
       <div className='content'>
         <Header />
         <main>
@@ -36,6 +37,6 @@ export default function App() {
         </main>
       </div>
       <Footer />
-    </>
+    </CartContext.Provider>
   )
 }
