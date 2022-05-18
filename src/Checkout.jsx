@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { saveShippingAddress } from './services/shippingService'
 import formErrors from './services/formErrors'
+import { useCartContext } from './cartContext'
 
 // Form status state using enumaration pattern
 const STATUS = {
@@ -14,11 +15,12 @@ const STATUS = {
 const emptyAddress = { city: '', country: '' }
 const touchedObj = {}
 
-export default function Checkout({ cart, dispatch }) {
+export default function Checkout() {
   const [address, setAddress] = useState(emptyAddress)
   const [status, setStatus] = useState(STATUS.IDLE)
   const [saveError, setSaveError] = useState(null)
   const [touched, setTouched] = useState(touchedObj)
+  const { dispatch } = useCartContext()
 
   // Derived state
   // Form validation using formErrors f-n
