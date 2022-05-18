@@ -3,14 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom'
 import Spinner from '../Spinner'
 import PageNotFound from '../PageNotFound'
 import useFetch from '../services/useFetch'
-import { useCartContext } from '../cartContext'
+import { CartContext } from '../cartContext'
 
 export default function DetailWrapper() {
   const { id } = useParams()
-  const { dispatch } = useCartContext()
   const navigate = useNavigate()
   const fetchResp = useFetch(`products/${id}`)
-  const propsObj = { id, dispatch, navigate, fetchResp }
+  const propsObj = { id, navigate, fetchResp }
 
   return <Detail {...propsObj} />
 }
@@ -20,9 +19,12 @@ class Detail extends Component {
     sku: '',
   }
 
+  // connect class component to CartContext
+  static contextType = CartContext
+
   render() {
     const { sku } = this.state
-    const { id, dispatch, navigate, fetchResp } = this.props
+    const { id, navigate, fetchResp } = this.props
     const { data: product, loading, error } = fetchResp
 
     if (loading) return <Spinner />
@@ -54,7 +56,8 @@ class Detail extends Component {
           <button
             disabled={!sku}
             onClick={() => {
-              dispatch({ type: 'add', id, sku })
+              // use dispatch from CartContext
+              this.context.dispatch({ type: 'add', id, sku })
               navigate('/cart')
             }}
             className='btn btn-primary'
