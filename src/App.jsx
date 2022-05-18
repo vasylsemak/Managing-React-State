@@ -4,9 +4,9 @@ import { Routes, Route } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 import Products from './Products'
-import Detail from './Detail'
+import Detail from './class-components/Detail.class'
 import Cart from './Cart'
-import Checkout from './Checkout.class'
+import Checkout from './class-components/Checkout.class'
 import { useCartContext } from './cartContext'
 
 export default function App() {

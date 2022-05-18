@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { saveShippingAddress } from './services/shippingService'
-import formErrors from './services/formErrors'
+import { saveShippingAddress } from '../services/shippingService'
+import formErrors from '../services/formErrors'
 
 // Form status state using enumaration pattern
 const STATUS = {
